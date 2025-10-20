@@ -9,12 +9,12 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.File;
-import java.io.FileInputStream;
 
 import java.awt.*;
 import java.awt.TrayIcon.MessageType;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -110,7 +110,7 @@ public class Main {
 
             if (externalConfig.exists()) {
                 logger.info("Loading configuration from external file: {}", externalConfig.getAbsolutePath());
-                input = new FileInputStream(externalConfig);
+                input = Files.newInputStream(externalConfig.toPath());
             } else {
                 logger.info("External configuration not found, loading from classpath");
                 input = Main.class.getClassLoader().getResourceAsStream("application.properties");
@@ -249,7 +249,7 @@ public class Main {
             for (WebElement row : rows) {
                 try {
                     // Build CSS selector from class property
-                    String cssSelector = "td." + cellClass.replace(".", ".");
+                    String cssSelector = "td." + cellClass;
                     WebElement firstCell = row.findElement(By.cssSelector(cssSelector));
                     String caseNumber = firstCell.getText().trim();
 
